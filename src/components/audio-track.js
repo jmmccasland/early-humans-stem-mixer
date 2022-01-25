@@ -1,7 +1,25 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export default function AudioTrack({title, el, src}) {
+export default function AudioTrack({ audioContext, title, src, isPlaying }) {
+  const [audioTrack, setAudioTrack] = useState(null);
   const [isMuted, toggleMuted] = useState();
+  const elRef = useRef(null);
+
+  useEffect(() => {
+    if (elRef && audioContext) {
+      const createdTrack = audioContext.createMediaElementSource(elRef.current);
+      createdTrack.connect(audioContext.destination);
+      setAudioTrack(createdTrack);
+    }
+  }, [audioContext]);
+
+  useEffect(() => {
+    if (isPlaying) {
+      elRef.current.play();
+    } else {
+      elRef.current.pause();
+    }
+  }, [isPlaying])
 
   const muteTrack = (track) => {
     if (isMuted) {
@@ -15,12 +33,12 @@ export default function AudioTrack({title, el, src}) {
 
   return (
     <div>
-      <div>{title}</div>
-      <button onClick={() => muteTrack(el)}>
+      <button onClick={() => muteTrack(elRef)}>
         {isMuted ? "Un-mute" : "Mute"}
       </button>
       <button>Solo</button>
-      <audio src={src} controls ref={el}></audio>
+      <div>{title}</div>
+      <audio src={src} ref={elRef} controls></audio>
     </div>
   );
 }
