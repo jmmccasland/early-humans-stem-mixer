@@ -4,40 +4,102 @@ import {
 } from "react";
 import logo from './logo.svg';
 import AudioTrack from "./components/audio-track";
-import auxAudio from "./bounces/aux-bus.mp3";
-import bassAudio from "./bounces/bass-bus.mp3";
-import bgvAudio from "./bounces/bgv-bus.mp3";
 import drumAudio from "./bounces/drum-bus.mp3";
+import bassAudio from "./bounces/bass-bus.mp3";
+import rythmGuitarAudio from "./bounces/rythm-guitar-bus.mp3";
 import leadGuitarAudio from "./bounces/lead-guitar-bus.mp3";
 import leadVocalAudio from "./bounces/lead-vocal-bus.mp3";
-import rythmGuitarAudio from "./bounces/rythm-guitar-bus.mp3";
+import bgvAudio from "./bounces/bgv-bus.mp3";
 import synthAudio from "./bounces/synth-bus.mp3";
+import auxAudio from "./bounces/aux-bus.mp3";
 import './App.css';
+
+const songTracks = [
+  {
+    trackName: "Drums",
+    src: drumAudio
+  },
+  {
+    trackName: "Bass",
+    src: bassAudio
+  },
+  {
+    trackName: "Rythm Guitar",
+    src: rythmGuitarAudio
+  },
+  {
+    trackName: "Lead Guitar",
+    src: leadGuitarAudio
+  },
+  {
+    trackName: "Lead Vocal",
+    src: leadVocalAudio
+  },
+  {
+    trackName: "BGVs",
+    src: bgvAudio
+  },
+  {
+    trackName: "Synth",
+    src: synthAudio
+  },
+  {
+    trackName: "Aux",
+    src: auxAudio
+  },
+]
 
 function App() {
   const [audioContext, setAudioContext] = useState(null);
   const [isPlaying, toggleIsPlaying] = useState(false);
+  const [tracks, setTracks] = useState(songTracks);
+  const [soloedTracks, setSoloedTracks] = useState([]);
 
   useEffect(() => {
     const createdAudioContext = new AudioContext();
     setAudioContext(createdAudioContext);
   }, []);
 
+  const playSong = () => {
+    if (isPlaying) {
+      toggleIsPlaying(false)
+    } else {
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      toggleIsPlaying(true)
+    }
+  }
+
+  const toggleTrackSolo = (trackTitle) => {
+    if (soloedTracks.indexOf(trackTitle) === -1) {
+      setSoloedTracks([...soloedTracks, trackTitle]);
+    } else {
+      const newSoloedTracks = soloedTracks.filter(item => item !== trackTitle);
+      setSoloedTracks(newSoloedTracks);
+    }
+  }
+
   return (
     <div className="App" >
       <header className = "App-header" >
         <img src={logo} className = "App-logo" alt="logo" />
-        <button onClick={() => toggleIsPlaying(!isPlaying)}>
+        <button onClick={playSong}>
           {isPlaying ? "Pause" : "Play"}
         </button>
-        <AudioTrack audioContext={audioContext} title="Drums" src={drumAudio} isPlaying={isPlaying} />
-        <AudioTrack audioContext={audioContext} title="Bass" src={bassAudio} isPlaying={isPlaying} />
-        <AudioTrack audioContext={audioContext} title="BGV" src={bgvAudio} isPlaying={isPlaying} />
-        <AudioTrack audioContext={audioContext} title="Lead Guitar" src={leadGuitarAudio} isPlaying={isPlaying} />
-        <AudioTrack audioContext={audioContext} title="Lead Vocal" src={leadVocalAudio} isPlaying={isPlaying} />
-        <AudioTrack audioContext={audioContext} title="Rythm Guitar" src={rythmGuitarAudio} isPlaying={isPlaying} />
-        <AudioTrack audioContext={audioContext} title="Synth" src={synthAudio} isPlaying={isPlaying} />
-        <AudioTrack audioContext={audioContext} title="Aux" src={auxAudio} isPlaying={isPlaying} />
+        {tracks.map((track) => {
+          return (
+            <AudioTrack 
+              key={track.trackName}
+              audioContext={audioContext}
+              title={track.trackName}
+              src={track.src}
+              isPlaying={isPlaying}
+              soloedTracks={soloedTracks}
+              toggleTrackSolo={toggleTrackSolo}
+            />
+          )
+        })}
       </header>
     </div>
   );
