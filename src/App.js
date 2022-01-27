@@ -82,25 +82,29 @@ function App() {
 
   return (
     <div className="App" >
-      <header className = "App-header" >
-        <img src={logo} className = "App-logo" alt="logo" />
+      <header>
+      </header>
+      <main>
         <button onClick={playSong}>
           {isPlaying ? "Pause" : "Play"}
         </button>
-        {tracks.map((track) => {
-          return (
-            <AudioTrack 
-              key={track.trackName}
-              audioContext={audioContext}
-              title={track.trackName}
-              src={track.src}
-              isPlaying={isPlaying}
-              soloedTracks={soloedTracks}
-              toggleTrackSolo={toggleTrackSolo}
-            />
-          )
-        })}
-      </header>
+        <div className="w-full h-64 bg-gray-400">{/* waveform visualizer */}</div>
+        <div className="flex justify-between">
+          {tracks.map((track) => {
+            return (
+              <AudioTrack
+                key={track.trackName}
+                audioContext={audioContext}
+                title={track.trackName}
+                src={track.src}
+                isPlaying={isPlaying}
+                soloedTracks={soloedTracks}
+                toggleTrackSolo={toggleTrackSolo}
+              />
+            )
+          })}
+        </div>
+      </main>
     </div>
   );
 }

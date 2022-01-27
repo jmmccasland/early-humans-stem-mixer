@@ -49,16 +49,24 @@ export default function AudioTrack({ audioContext, title, src, isPlaying, soloed
   }
 
   return (
-    <div>
-      <button onClick={() => muteTrack(elRef)}>
-        {isMuted ? "Un-mute" : "Mute"}
-      </button>
-      <button onClick={()=> soloTrack(title)}>
-        {/* {isMuted ? "Un-solo" : "Solo"} */}
-        solo
-      </button>
+    <div className="relative flex flex-col justify-between items-center">
+      <audio src={src} ref={elRef}></audio>
+      <div className="flex items-center gap-1">
+        <button
+          className={`w-11 h-11 text-xs text-white border border-gray-800 ${isMuted ? 'bg-yellow-400' : 'bg-gray-400'}`}
+          onClick={()=> soloTrack(title)}
+        >
+          SOLO
+        </button>
+        <button
+          className={`w-11 h-11 text-xs text-white border border-gray-800 ${isMuted ? 'bg-orange-400' : 'bg-gray-400'}`}
+          onClick={() => muteTrack(elRef)}
+        >
+          MUTE
+        </button>
+      </div>
+      <div className="bg-gray-400 rounded w-2 h-96">{/* fader slot */}</div>
       <div>{title}</div>
-      <audio src={src} ref={elRef} controls></audio>
     </div>
   );
 }
