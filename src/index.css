@@ -2,16 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@layer components {
+  .console {
+    @apply flex;
+  }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  .audio-track {
+    @apply relative flex flex-col justify-between items-center p-2;
+    @apply border-y border-l border-gray-700 bg-silver;
+  }
+
+  .track-tape {
+    @apply transform -rotate-2 bg-white rounded p-3 font-bold uppercase text-center text-xs;
+  }
 }

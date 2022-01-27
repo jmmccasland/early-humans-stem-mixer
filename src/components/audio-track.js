@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function AudioTrack({ audioContext, title, src, isPlaying, soloedTracks, toggleTrackSolo, muted }) {
+export default function AudioTrack({ audioContext, title, src, isPlaying, soloedTracks, toggleTrackSolo, muted, numberOfTracks, trackNumber }) {
   const [audioTrack, setAudioTrack] = useState(null);
   const [isMuted, toggleMuted] = useState(muted);
-  // const [isSoloed, toggleSoloed] = useState(false);
+  const [isSoloed, toggleSoloed] = useState(false);
+  
   const elRef = useRef(null);
 
   useEffect(() => {
@@ -26,11 +27,14 @@ export default function AudioTrack({ audioContext, title, src, isPlaying, soloed
     if(soloedTracks.length) {
       if (soloedTracks.indexOf(title) !== -1) {
         elRef.current.muted = false
+        toggleSoloed(true);
       } else {
         elRef.current.muted = true
+        toggleSoloed(false);
       }
     } else {
       elRef.current.muted = false;
+      toggleSoloed(false);
     }
   }, [soloedTracks, title]);
 
@@ -49,11 +53,11 @@ export default function AudioTrack({ audioContext, title, src, isPlaying, soloed
   }
 
   return (
-    <div className="relative flex flex-col justify-between items-center">
+    <div className={`audio-track ${trackNumber === numberOfTracks ? 'border-r': ''}`}>
       <audio src={src} ref={elRef}></audio>
       <div className="flex items-center gap-1">
         <button
-          className={`w-11 h-11 text-xs text-white border border-gray-800 ${isMuted ? 'bg-yellow-400' : 'bg-gray-400'}`}
+          className={`w-11 h-11 text-xs text-white border border-gray-800 ${isSoloed ? 'bg-yellow-400' : 'bg-gray-400'}`}
           onClick={()=> soloTrack(title)}
         >
           SOLO
@@ -65,8 +69,8 @@ export default function AudioTrack({ audioContext, title, src, isPlaying, soloed
           MUTE
         </button>
       </div>
-      <div className="bg-gray-400 rounded w-2 h-96">{/* fader slot */}</div>
-      <div>{title}</div>
+      <div className="bg-gray-400 rounded w-2 h-80">{/* fader slot */}</div>
+      <div className="track-tape">{title}</div>
     </div>
   );
 }

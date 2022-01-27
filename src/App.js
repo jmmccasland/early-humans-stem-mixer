@@ -2,7 +2,6 @@ import {
   useEffect,
   useState
 } from "react";
-import logo from './logo.svg';
 import AudioTrack from "./components/audio-track";
 import drumAudio from "./bounces/drum-bus.mp3";
 import bassAudio from "./bounces/bass-bus.mp3";
@@ -12,7 +11,6 @@ import leadVocalAudio from "./bounces/lead-vocal-bus.mp3";
 import bgvAudio from "./bounces/bgv-bus.mp3";
 import synthAudio from "./bounces/synth-bus.mp3";
 import auxAudio from "./bounces/aux-bus.mp3";
-import './App.css';
 
 const songTracks = [
   {
@@ -81,7 +79,7 @@ function App() {
   }
 
   return (
-    <div className="App" >
+    <div>
       <header>
       </header>
       <main>
@@ -89,20 +87,24 @@ function App() {
           {isPlaying ? "Pause" : "Play"}
         </button>
         <div className="w-full h-64 bg-gray-400">{/* waveform visualizer */}</div>
-        <div className="flex justify-between">
-          {tracks.map((track) => {
-            return (
-              <AudioTrack
-                key={track.trackName}
-                audioContext={audioContext}
-                title={track.trackName}
-                src={track.src}
-                isPlaying={isPlaying}
-                soloedTracks={soloedTracks}
-                toggleTrackSolo={toggleTrackSolo}
-              />
-            )
-          })}
+        <div className="p-4">
+          <div className="console">
+            {tracks.map((track, index) => {
+              return (
+                <AudioTrack
+                  key={index}
+                  trackNumber={index + 1}
+                  numberOfTracks={tracks.length}
+                  audioContext={audioContext}
+                  title={track.trackName}
+                  src={track.src}
+                  isPlaying={isPlaying}
+                  soloedTracks={soloedTracks}
+                  toggleTrackSolo={toggleTrackSolo}
+                />
+              )
+            })}
+          </div>
         </div>
       </main>
     </div>
