@@ -50,21 +50,34 @@ const stems = [
 ];
 
 /* @TODO: 
-  - is visually responsive on mobile ✅
-    - and desktop
-  - can play song ✅
-  - can pause song ✅
-  - can mute each individual track ✅
-  - can solo each individual track ✅
-  - can control the volume of each track ✅ 
-  - can run on mobile
+  functionality:
+  ✅ - can play song
+  ✅ - can pause song
+  - can mute each individual track
+  - can solo each individual track
+  - can control the volume of each track 
+  ✅ - can run on mobile
   - can see current position in song
   - can slide to chosen position in song
-  - tracks stay synced (perhaps wait til all stems download to begin playing?)
+  ✅ - tracks stay synced (perhaps wait til all stems download to begin playing?)
+  ✅ - shows loading state of downloading mp3s
+  - more polished loading state
+    - (perhaps w/ info on how to use app 
+    - and manual trigger to begin downloading stems)
 
+  style/content:
+  ✅ - is visually responsive on mobile
+  - and desktop
+  - shows album art
+  - makes use of spotify canvas video
+  - has follow links for early humans socials etc
+  - add gtag
+
+  stretch:
   - can visualize the loudness of each track
   - can visualize the loudness of each track when modified
-  - can paint it onto canvas
+  - can paint it onto canvas in different ways for each track
+  - can save the canvas painting and download image
 */
 
 function App() {
@@ -116,9 +129,15 @@ function App() {
           {/* <button className="h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={downloadStems}>
             Download Stems
           </button> */}
-          {tracks.length === trackLoadedCount ? <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={playSong}>
-            {isPlaying ? "Pause" : "Play"}
-          </button> : ""}
+
+          {tracks.length === trackLoadedCount ? (
+            <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400"
+              onClick={playSong}
+            >
+              {isPlaying ? "Pause" : "Play"}
+            </button> 
+          ) : "Loading stems. . . this may take a minute or two"}
+
           <div className="console">
             {tracks.map((track, index) => {
               return (
