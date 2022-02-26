@@ -3,14 +3,6 @@ import {
   useState
 } from "react";
 import AudioTrack from "./components/audio-track";
-import drumAudio from "./bounces/drum-bus.mp3";
-import bassAudio from "./bounces/bass-bus.mp3";
-import rythmGuitarAudio from "./bounces/rythm-guitar-bus.mp3";
-import leadGuitarAudio from "./bounces/lead-guitar-bus.mp3";
-import leadVocalAudio from "./bounces/lead-vocal-bus.mp3";
-import bgvAudio from "./bounces/bgv-bus.mp3";
-import synthAudio from "./bounces/synth-bus.mp3";
-import auxAudio from "./bounces/aux-bus.mp3";
 import art from "./bounces/art.jpeg";
 
 /* @TODO: 
@@ -29,45 +21,10 @@ import art from "./bounces/art.jpeg";
   - tracks stay synced (perhaps wait til all stems download to begin playing?)
 */
 
-const songTracks = [
-  {
-    trackName: "Drums",
-    src: drumAudio
-  },
-  {
-    trackName: "Bass",
-    src: bassAudio
-  },
-  {
-    trackName: "Rythm Guitar",
-    src: rythmGuitarAudio
-  },
-  {
-    trackName: "Lead Guitar",
-    src: leadGuitarAudio
-  },
-  {
-    trackName: "Lead Vocal",
-    src: leadVocalAudio
-  },
-  {
-    trackName: "BGVs",
-    src: bgvAudio
-  },
-  {
-    trackName: "Synth",
-    src: synthAudio
-  },
-  {
-    trackName: "Aux",
-    src: auxAudio
-  },
-]
-
 function App() {
   const [audioContext, setAudioContext] = useState(null);
   const [isPlaying, toggleIsPlaying] = useState(false);
-  const [tracks, setTracks] = useState(songTracks);
+  const [tracks, setTracks] = useState([]);
   const [soloedTracks, setSoloedTracks] = useState([]);
 
   useEffect(() => {
@@ -95,6 +52,54 @@ function App() {
     }
   }
 
+  const downloadStems = async () => {
+    // async function importFile() {
+      const drumAudio = await import("./bounces/drum-bus.mp3");
+      const bassAudio = await import("./bounces/bass-bus.mp3");
+      const rythmGuitarAudio = await import("./bounces/rythm-guitar-bus.mp3");
+      const leadGuitarAudio = await import("./bounces/lead-guitar-bus.mp3");
+      const leadVocalAudio = await import("./bounces/lead-vocal-bus.mp3");
+      const bgvAudio = await import("./bounces/bgv-bus.mp3");
+      const synthAudio = await import("./bounces/synth-bus.mp3");
+      const auxAudio = await import("./bounces/aux-bus.mp3");
+      setTracks([
+        {
+          trackName: "Drums",
+          src: drumAudio.default
+        },
+        {
+          trackName: "Bass",
+          src: bassAudio.default
+        },
+        {
+          trackName: "Rythm Guitar",
+          src: rythmGuitarAudio.default
+        },
+        {
+          trackName: "Lead Guitar",
+          src: leadGuitarAudio.default
+        },
+        {
+          trackName: "Lead Vocal",
+          src: leadVocalAudio.default
+        },
+        {
+          trackName: "BGVs",
+          src: bgvAudio.default
+        },
+        {
+          trackName: "Synth",
+          src: synthAudio.default
+        },
+        {
+          trackName: "Aux",
+          src: auxAudio.default
+        },
+      ]); // <==========
+    // }
+    // importFile();
+  }
+
   return (
     <div className="w-full" style={{ backgroundImage: art, }}>
       <header>
@@ -106,11 +111,12 @@ function App() {
           {/* <img src={art} /> */}
         </div>
         <div className="p-4">
+          <button className="h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={downloadStems}>Download Stems</button>
           <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={playSong}>
             {isPlaying ? "Pause" : "Play"}
           </button>
           <div className="console">
-            {tracks.map((track, index) => {
+            {tracks?.map((track, index) => {
               return (
                 <AudioTrack
                   key={index}
