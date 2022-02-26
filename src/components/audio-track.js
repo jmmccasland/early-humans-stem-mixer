@@ -8,6 +8,8 @@ export default function AudioTrack({ audioContext, title, src, isPlaying, soloed
   
   const elRef = useRef(null);
   const gainRef = useRef(null)
+  const analyserRef = useRef(null)
+  const canvasRef = useRef(null)
 
   useEffect(() => {
     if (elRef && audioContext) {
@@ -15,12 +17,77 @@ export default function AudioTrack({ audioContext, title, src, isPlaying, soloed
       const gainNode = audioContext.createGain();
       gainRef.current = gainNode;
 
-      console.log(gainRef)
+      const analyser = audioContext.createAnalyser();
+      analyser.minDecibels = -90;
+      analyser.maxDecibels = -10;
+      analyser.smoothingTimeConstant = 0.85;
+      
+      analyser.fftSize = 2048;
+      let bufferLength = analyser.frequencyBinCount;
+      let dataArray = new Uint8Array(bufferLength);
 
-      createdTrack.connect(gainNode).connect(audioContext.destination);
+      analyser.getByteTimeDomainData(dataArray)
+
+      analyserRef.current = analyser;
+      console.log(analyserRef)
+
+      createdTrack.connect(gainNode).connect(analyser).connect(audioContext.destination);
       setAudioTrack(createdTrack);
     }
   }, [audioContext]);
+
+  useEffect(() => {
+    console.log(canvasRef)
+    if (canvasRef.current && analyserRef.current) {
+      let WIDTH = 640;
+      let HEIGHT = 100;
+      const canvasCtx = canvasRef.current.getContext("2d");
+      let drawVisual;
+
+      analyserRef.current.fftSize = 1024;
+      var bufferLength = analyserRef.current.fftSize;
+      console.log(bufferLength);
+      var dataArray = new Float32Array(bufferLength);
+
+      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+
+      function draw() {
+        drawVisual = requestAnimationFrame(draw);
+
+        analyserRef.current.getFloatTimeDomainData(dataArray);
+
+        canvasCtx.fillStyle = 'rgb(200, 200, 200)';
+        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+        canvasCtx.lineWidth = 2;
+        canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+
+        canvasCtx.beginPath();
+
+        var sliceWidth = WIDTH * 1.0 / bufferLength;
+        var x = 0;
+
+        for(var i = 0; i < bufferLength; i++) {
+    
+          var v = dataArray[i] * 200.0;
+          var y = HEIGHT/2 + v;
+
+          if(i === 0) {
+            canvasCtx.moveTo(x, y);
+          } else {
+            canvasCtx.lineTo(x, y);
+          }
+
+          x += sliceWidth;
+        }
+
+        canvasCtx.lineTo(canvasRef.current.width, canvasRef.current.height/2);
+        canvasCtx.stroke();
+      };
+
+      draw();
+    }
+  }, [analyserRef, audioContext])
 
   useEffect(() => {
     if (isPlaying) {
@@ -87,7 +154,7 @@ export default function AudioTrack({ audioContext, title, src, isPlaying, soloed
           <input className="w-full" type="range" onChange={handleVolumeChange} min="0" max="2" value={currentVolume} step="0.01" />
         </div>
       </div>
-
+      <canvas ref={canvasRef} width="75" height="75"></canvas>
     </div>
   );
 }

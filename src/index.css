@@ -99,3 +99,11 @@ input[type=range]:focus {
 input[type=range]:focus::-webkit-slider-runnable-track {
   background: rgb(55 65 81);
 }
+
+canvas {
+  border: 1px solid black;
+  margin-left: 8px;
+  /* box-shadow: 0 -2px 4px rgba(0,0,0,0.7),
+              0 3px 4px rgba(0,0,0,0.7); */
+              background-color: white;;
+}
