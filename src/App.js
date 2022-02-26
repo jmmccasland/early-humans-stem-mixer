@@ -53,7 +53,7 @@ const stems = [
   functionality:
   ✅ - can play song
   ✅ - can pause song
-  - can mute each individual track
+  ✅ - can mute each individual track
   - can solo each individual track
   - can control the volume of each track 
   ✅ - can run on mobile
