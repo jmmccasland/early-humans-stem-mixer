@@ -64,10 +64,10 @@ export default function AudioTrack({
   const muteTrack = (track) => {
     if (isMuted) {
       toggleMuted(false);
-      // track.current.muted = false;
+      soundRef.current.mute(false);
     } else {
       toggleMuted(true);
-      // track.current.muted = true;
+      soundRef.current.mute(true);
     }
   }
 
