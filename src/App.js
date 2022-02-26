@@ -54,8 +54,8 @@ const stems = [
   ✅ - can play song
   ✅ - can pause song
   ✅ - can mute each individual track
-  - can solo each individual track
-  - can control the volume of each track 
+  ✅ - can solo each individual track
+  ✅ - can control the volume of each track 
   ✅ - can run on mobile
   - can see current position in song
   - can slide to chosen position in song
