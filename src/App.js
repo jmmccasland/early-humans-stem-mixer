@@ -64,6 +64,8 @@ const stems = [
   - more polished loading state
     - (perhaps w/ info on how to use app 
     - and manual trigger to begin downloading stems)
+  - (iOS) once play button is exposed, audio should start right after action
+  ✅ - volume fader's don't decrease weirdly when increasing initially (set initial state of volume on howl constructor)
 
   style/content:
   ✅ - is visually responsive on mobile
