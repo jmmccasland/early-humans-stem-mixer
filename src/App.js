@@ -4,6 +4,7 @@ import {
 } from "react";
 import AudioTrack from "./components/audio-track";
 import art from "./bounces/art.jpeg";
+import {Howl, Howler} from 'howler';
 
 /* @TODO: 
   - is visually responsive on mobile ✅
@@ -54,8 +55,8 @@ function App() {
     }
   }
 
-  const downloadStems = async () => {
-    // async function importFile() {
+  useEffect(() => {
+    async function importFile() {
       const drumAudio = await import("./bounces/drum-bus.mp3");
       const bassAudio = await import("./bounces/bass-bus.mp3");
       const rythmGuitarAudio = await import("./bounces/rythm-guitar-bus.mp3");
@@ -98,9 +99,9 @@ function App() {
           src: auxAudio.default
         },
       ]); // <==========
-    // }
-    // importFile();
-  }
+    }
+    importFile();
+  }, [])
 
   return (
     <div className="w-full" style={{ backgroundImage: art, }}>
@@ -113,9 +114,9 @@ function App() {
           {/* <img src={art} /> */}
         </div>
         <div className="p-4">
-          <button className="h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={downloadStems}>
+          {/* <button className="h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={downloadStems}>
             Download Stems
-          </button>
+          </button> */}
           {tracks.length ? <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={playSong}>
             {isPlaying ? "Pause" : "Play"}
           </button> : ""}
