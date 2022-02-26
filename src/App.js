@@ -13,39 +13,47 @@ import leadVocalAudio from "./bounces/lead-vocal-bus.mp3";
 import bgvAudio from "./bounces/bgv-bus.mp3";
 import synthAudio from "./bounces/synth-bus.mp3";
 import auxAudio from "./bounces/aux-bus.mp3";
+import drumWebm from "./bounces/drum-bus.webm";
+import bassWebm from "./bounces/bass-bus.webm";
+import rythmGuitarWebm from "./bounces/rythm-guitar-bus.webm";
+import leadGuitarWebm from "./bounces/lead-guitar-bus.webm";
+import leadVocalWebm from "./bounces/lead-vocal-bus.webm";
+import bgvWebm from "./bounces/bgv-bus.webm";
+import synthWebm from "./bounces/synth-bus.webm";
+import auxWebm from "./bounces/aux-bus.webm";
 
 const stems = [
   {
     trackName: "Drums",
-    src: drumAudio
+    src: [drumWebm, drumAudio]
   },
   {
     trackName: "Bass",
-    src: bassAudio
+    src: [bassWebm, bassAudio]
   },
   {
     trackName: "Rythm Guitar",
-    src: rythmGuitarAudio
+    src: [rythmGuitarWebm, rythmGuitarAudio]
   },
   {
     trackName: "Lead Guitar",
-    src: leadGuitarAudio
+    src: [leadGuitarWebm, leadGuitarAudio]
   },
   {
     trackName: "Lead Vocal",
-    src: leadVocalAudio
+    src: [leadVocalWebm, leadVocalAudio]
   },
   {
     trackName: "BGVs",
-    src: bgvAudio
+    src: [bgvWebm, bgvAudio]
   },
   {
     trackName: "Synth",
-    src: synthAudio
+    src: [synthWebm, synthAudio]
   },
   {
     trackName: "Aux",
-    src: auxAudio
+    src: [auxWebm, auxAudio]
   },
 ];
 
@@ -154,7 +162,7 @@ function App() {
                   toggleTrackSolo={toggleTrackSolo}
                   trackLoaded={trackLoadedCount}
                   setTrackLoadedCount={() => handleSetTrackLoadedCount(track.trackName)}
-                />
+                  />
               )
             })}
           </div>

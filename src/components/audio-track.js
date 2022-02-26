@@ -20,7 +20,7 @@ export default function AudioTrack({
   useEffect(() => {
     if (src) {
       const sound = new Howl({
-        src: [src],
+        src: src,
         masterGain: true,
         volume: currentVolume,
         // html5: true, // streaming gets shit out of sync
