@@ -11,6 +11,22 @@ import leadVocalAudio from "./bounces/lead-vocal-bus.mp3";
 import bgvAudio from "./bounces/bgv-bus.mp3";
 import synthAudio from "./bounces/synth-bus.mp3";
 import auxAudio from "./bounces/aux-bus.mp3";
+import art from "./bounces/art.jpeg";
+
+/* @TODO: 
+  - is visually responsive on mobile ✅
+    - and desktop
+  - can play song ✅
+  - can pause song ✅
+  - can mute each individual track ✅
+  - can solo each individual track ✅
+  - can control the volume of each track ✅ 
+  - can visualize the loudness of each track
+  - can visualize the loudness of each track when 
+  - can run on mobile
+  - can see current position in song
+  - can slide to chosen position in song
+*/
 
 const songTracks = [
   {
@@ -79,15 +95,19 @@ function App() {
   }
 
   return (
-    <div>
+    <div className="w-full" style={{ backgroundImage: art, }}>
       <header>
       </header>
       <main>
-        <button onClick={playSong}>
-          {isPlaying ? "Pause" : "Play"}
-        </button>
-        <div className="w-full h-64 bg-gray-400">{/* waveform visualizer */}</div>
+        
+        <div className="w-fullbg-gray-400">
+          {/* waveform visualizer */}
+          {/* <img src={art} /> */}
+        </div>
         <div className="p-4">
+          <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={playSong}>
+            {isPlaying ? "Pause" : "Play"}
+          </button>
           <div className="console">
             {tracks.map((track, index) => {
               return (

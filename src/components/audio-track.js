@@ -2,15 +2,22 @@ import { useEffect, useRef, useState } from "react";
 
 export default function AudioTrack({ audioContext, title, src, isPlaying, soloedTracks, toggleTrackSolo, muted, numberOfTracks, trackNumber }) {
   const [audioTrack, setAudioTrack] = useState(null);
+  const [currentVolume, setCurrentVolume] = useState(1);
   const [isMuted, toggleMuted] = useState(muted);
   const [isSoloed, toggleSoloed] = useState(false);
   
   const elRef = useRef(null);
+  const gainRef = useRef(null)
 
   useEffect(() => {
     if (elRef && audioContext) {
       const createdTrack = audioContext.createMediaElementSource(elRef.current);
-      createdTrack.connect(audioContext.destination);
+      const gainNode = audioContext.createGain();
+      gainRef.current = gainNode;
+
+      console.log(gainRef)
+
+      createdTrack.connect(gainNode).connect(audioContext.destination);
       setAudioTrack(createdTrack);
     }
   }, [audioContext]);
@@ -52,25 +59,35 @@ export default function AudioTrack({ audioContext, title, src, isPlaying, soloed
     toggleTrackSolo(title);
   }
 
+  const handleVolumeChange = (e) => {
+    setCurrentVolume(e.target.value);
+    gainRef.current.gain.value = e.target.value;
+  }
+
   return (
     <div className={`audio-track ${trackNumber === numberOfTracks ? 'border-r': ''}`}>
       <audio src={src} ref={elRef}></audio>
-      <div className="flex items-center gap-1">
-        <button
-          className={`w-11 h-11 text-xs text-white border border-gray-800 ${isSoloed ? 'bg-yellow-400' : 'bg-gray-400'}`}
-          onClick={()=> soloTrack(title)}
-        >
-          SOLO
-        </button>
-        <button
-          className={`w-11 h-11 text-xs text-white border border-gray-800 ${isMuted ? 'bg-orange-400' : 'bg-gray-400'}`}
-          onClick={() => muteTrack(elRef)}
-        >
-          MUTE
-        </button>
+      <div className="track-info flex justify-between items-center w-full flex-wrap">
+        <div className="track-tape">{title}</div>
+        <div className="flex items-center gap-1">
+          <button
+            className={`w-11 h-11 text-xs text-white border rounded border-gray-800 ${isSoloed ? 'bg-yellow-400' : 'bg-gray-400'}`}
+            onClick={()=> soloTrack(title)}
+          >
+            SOLO
+          </button>
+          <button
+            className={`w-11 h-11 text-xs text-white border rounded border-gray-800 ${isMuted ? 'bg-orange-400' : 'bg-gray-400'}`}
+            onClick={() => muteTrack(elRef)}
+          >
+            MUTE
+          </button>
+        </div>
+        <div className="h-4 w-full flex-grow mt-2 mx-4 mb-4">
+          <input className="w-full" type="range" onChange={handleVolumeChange} min="0" max="2" value={currentVolume} step="0.01" />
+        </div>
       </div>
-      <div className="bg-gray-400 rounded w-2 h-80">{/* fader slot */}</div>
-      <div className="track-tape">{title}</div>
+
     </div>
   );
 }
