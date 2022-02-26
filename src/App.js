@@ -1,10 +1,53 @@
 import {
-  useEffect,
-  useState
+  useState,
+  useRef
 } from "react";
 import AudioTrack from "./components/audio-track";
 import art from "./bounces/art.jpeg";
-import {Howl, Howler} from 'howler';
+
+import drumAudio from "./bounces/drum-bus.mp3";
+import bassAudio from "./bounces/bass-bus.mp3";
+import rythmGuitarAudio from "./bounces/rythm-guitar-bus.mp3";
+import leadGuitarAudio from "./bounces/lead-guitar-bus.mp3";
+import leadVocalAudio from "./bounces/lead-vocal-bus.mp3";
+import bgvAudio from "./bounces/bgv-bus.mp3";
+import synthAudio from "./bounces/synth-bus.mp3";
+import auxAudio from "./bounces/aux-bus.mp3";
+
+const stems = [
+  {
+    trackName: "Drums",
+    src: drumAudio
+  },
+  {
+    trackName: "Bass",
+    src: bassAudio
+  },
+  {
+    trackName: "Rythm Guitar",
+    src: rythmGuitarAudio
+  },
+  {
+    trackName: "Lead Guitar",
+    src: leadGuitarAudio
+  },
+  {
+    trackName: "Lead Vocal",
+    src: leadVocalAudio
+  },
+  {
+    trackName: "BGVs",
+    src: bgvAudio
+  },
+  {
+    trackName: "Synth",
+    src: synthAudio
+  },
+  {
+    trackName: "Aux",
+    src: auxAudio
+  },
+];
 
 /* @TODO: 
   - is visually responsive on mobile ✅
@@ -14,34 +57,27 @@ import {Howl, Howler} from 'howler';
   - can mute each individual track ✅
   - can solo each individual track ✅
   - can control the volume of each track ✅ 
-  - can visualize the loudness of each track
-  - can visualize the loudness of each track when 
   - can run on mobile
   - can see current position in song
   - can slide to chosen position in song
   - tracks stay synced (perhaps wait til all stems download to begin playing?)
+
+  - can visualize the loudness of each track
+  - can visualize the loudness of each track when modified
+  - can paint it onto canvas
 */
 
 function App() {
-  const [audioContext, setAudioContext] = useState(null);
   const [isPlaying, toggleIsPlaying] = useState(false);
-  const [tracks, setTracks] = useState([]);
+  const [tracks, setTracks] = useState(stems);
   const [soloedTracks, setSoloedTracks] = useState([]);
-
-  useEffect(() => {
-    if (tracks.length) {
-      const createdAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-      setAudioContext(createdAudioContext);
-    }
-  }, [tracks]);
+  const [trackLoadedCount, setTrackLoadedCount] = useState(0);
+  const currentCount = useRef(0);
 
   const playSong = () => {
     if (isPlaying) {
       toggleIsPlaying(false)
     } else {
-      if (audioContext.state === 'suspended') {
-        audioContext.resume();
-      }
       toggleIsPlaying(true)
     }
   }
@@ -55,57 +91,20 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    async function importFile() {
-      const drumAudio = await import("./bounces/drum-bus.mp3");
-      const bassAudio = await import("./bounces/bass-bus.mp3");
-      const rythmGuitarAudio = await import("./bounces/rythm-guitar-bus.mp3");
-      const leadGuitarAudio = await import("./bounces/lead-guitar-bus.mp3");
-      const leadVocalAudio = await import("./bounces/lead-vocal-bus.mp3");
-      const bgvAudio = await import("./bounces/bgv-bus.mp3");
-      const synthAudio = await import("./bounces/synth-bus.mp3");
-      const auxAudio = await import("./bounces/aux-bus.mp3");
-      setTracks([
-        {
-          trackName: "Drums",
-          src: drumAudio.default
-        },
-        {
-          trackName: "Bass",
-          src: bassAudio.default
-        },
-        {
-          trackName: "Rythm Guitar",
-          src: rythmGuitarAudio.default
-        },
-        {
-          trackName: "Lead Guitar",
-          src: leadGuitarAudio.default
-        },
-        {
-          trackName: "Lead Vocal",
-          src: leadVocalAudio.default
-        },
-        {
-          trackName: "BGVs",
-          src: bgvAudio.default
-        },
-        {
-          trackName: "Synth",
-          src: synthAudio.default
-        },
-        {
-          trackName: "Aux",
-          src: auxAudio.default
-        },
-      ]); // <==========
+  const handleSetTrackLoadedCount = (title) => {
+    console.log(`${title} loaded`);
+    currentCount.current += 1;
+    console.log(currentCount.current)
+
+    if (currentCount.current === tracks.length) {
+      setTrackLoadedCount(8);
     }
-    importFile();
-  }, [])
+  }
 
   return (
     <div className="w-full" style={{ backgroundImage: art, }}>
       <header>
+        {/* early humans */}
       </header>
       <main>
         
@@ -117,22 +116,23 @@ function App() {
           {/* <button className="h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={downloadStems}>
             Download Stems
           </button> */}
-          {tracks.length ? <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={playSong}>
+          {tracks.length === trackLoadedCount ? <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={playSong}>
             {isPlaying ? "Pause" : "Play"}
           </button> : ""}
           <div className="console">
-            {tracks?.map((track, index) => {
+            {tracks.map((track, index) => {
               return (
                 <AudioTrack
                   key={index}
                   trackNumber={index + 1}
                   numberOfTracks={tracks.length}
-                  audioContext={audioContext}
                   title={track.trackName}
                   src={track.src}
                   isPlaying={isPlaying}
                   soloedTracks={soloedTracks}
                   toggleTrackSolo={toggleTrackSolo}
+                  trackLoaded={trackLoadedCount}
+                  setTrackLoadedCount={() => handleSetTrackLoadedCount(track.trackName)}
                 />
               )
             })}
