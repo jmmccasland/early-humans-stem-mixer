@@ -22,6 +22,7 @@ export default function AudioTrack({
       const sound = new Howl({
         src: [src],
         masterGain: true,
+        volume: currentVolume,
         // html5: true, // streaming gets shit out of sync
         onload: function() {
           setTrackLoadedCount()
@@ -32,11 +33,12 @@ export default function AudioTrack({
         onseek: function() {},
         onloaderror: function() {
           // handleLoadError()
+          console.log("error in track", title)
         }
       });
       soundRef.current = sound;
     }
-  }, [src]);
+  }, [src, title]);
 
   useEffect(() => {
     if (isPlaying) {
