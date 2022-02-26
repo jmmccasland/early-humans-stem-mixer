@@ -26,6 +26,7 @@ import art from "./bounces/art.jpeg";
   - can run on mobile
   - can see current position in song
   - can slide to chosen position in song
+  - tracks stay synced (perhaps wait til all stems download to begin playing?)
 */
 
 const songTracks = [

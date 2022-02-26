@@ -9,7 +9,113 @@ export default function AudioTrack({ audioContext, title, src, isPlaying, soloed
   const elRef = useRef(null);
   const gainRef = useRef(null)
   const analyserRef = useRef(null)
-  const canvasRef = useRef(null)
+  // const canvasRef = useRef(null)
+
+  // function drawLine(analyser, canvas) {
+  //   let WIDTH = 640;
+  //   let HEIGHT = 100;
+  //   const canvasCtx = canvas.current.getContext("2d");
+  //   let drawVisual;
+  
+  //   analyser.current.fftSize = 1024;
+  //   var bufferLength = analyser.current.fftSize;
+  //   var dataArray = new Float32Array(bufferLength);
+  
+  //   canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+  //   drawVisual = requestAnimationFrame(() => drawLine(analyser, canvas));
+  
+  //   analyser.current.getFloatTimeDomainData(dataArray);
+  
+  //   canvasCtx.fillStyle = 'rgb(200, 200, 200)';
+  //   canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+  
+  //   canvasCtx.lineWidth = 2;
+  //   canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+  
+  //   canvasCtx.beginPath();
+  
+  //   var sliceWidth = WIDTH * 1.0 / bufferLength;
+  //   var x = 0;
+  
+  //   for(var i = 0; i < bufferLength; i++) {
+  
+  //     var v = dataArray[i] * 10.0;
+  //     var y = HEIGHT/2 + v;
+  
+  //     if(i === 0) {
+  //       canvasCtx.moveTo(x, y);
+  //     } else {
+  //       canvasCtx.lineTo(x, y);
+  //     }
+  
+  //     x += sliceWidth;
+  //   }
+  
+  //   canvasCtx.lineTo(canvas.current.width, canvas.current.height/2);
+  //   canvasCtx.stroke();
+  // };
+  
+  // function drawBars(analyser, canvas) {
+  //   let WIDTH = 640;
+  //   let HEIGHT = 100;
+  //   const canvasCtx = canvas.current.getContext("2d");
+  //   let drawVisual;
+  
+  //   analyser.current.fftSize = 1024;
+  //   var bufferLength = analyser.current.fftSize;
+  //   var dataArray = new Float32Array(bufferLength);
+  
+  //   canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+  //   drawVisual = requestAnimationFrame(() => drawBars(analyser, canvas));
+  
+  //   analyser.current.getFloatFrequencyData(dataArray);
+  
+  //   canvasCtx.fillStyle = '#fff';
+  //   canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+  
+  //   var barWidth = (WIDTH / bufferLength) * 2.5;
+  //   var barHeight;
+  //   var x = 0;
+  
+  //   for(var i = 0; i < bufferLength; i++) {
+  //     barHeight = (dataArray[i] + 140)*2;
+      
+  //     canvasCtx.fillStyle = 'rgb(' + Math.floor(0+10) + ',0,0)';
+  //     canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
+  
+  //     x += barWidth + 1;
+  //   }
+  // }
+
+  // function drawGradient(analyser, canvas) {
+  //   let WIDTH = 640;
+  //   let HEIGHT = 100;
+  //   const canvasCtx = canvas.current.getContext("2d");
+  //   let drawVisual;
+  
+  //   analyser.current.fftSize = 1024;
+  //   var bufferLength = analyser.current.frequencyBinCount;
+  //   var dataArray = new Float32Array(bufferLength);
+  
+  //   canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+  //   drawVisual = requestAnimationFrame(() => drawGradient(analyser, canvas));
+  
+  //   analyser.current.getFloatTimeDomainData(dataArray);
+  
+  //   canvasCtx.fillStyle = 'cornflowerblue';
+  //   canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  //   var gradient = canvasCtx.createRadialGradient(30,90,30, 10,90,100);
+  //   // Add three color stops
+  //   console.log(dataArray)
+  //   gradient.addColorStop(dataArray[0], 'blue');
+  //   gradient.addColorStop(dataArray[100], 'cornflowerblue');
+  //   gradient.addColorStop(dataArray[300], 'green');
+
+  //   // Set the fill style and draw a rectangle
+  //   canvasCtx.fillStyle = gradient;
+  //   canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+  // }
 
   useEffect(() => {
     if (elRef && audioContext) {
@@ -29,65 +135,31 @@ export default function AudioTrack({ audioContext, title, src, isPlaying, soloed
       analyser.getByteTimeDomainData(dataArray)
 
       analyserRef.current = analyser;
-      console.log(analyserRef)
 
       createdTrack.connect(gainNode).connect(analyser).connect(audioContext.destination);
       setAudioTrack(createdTrack);
+
+      // if (canvasRef.current && analyserRef.current) {
+      //   switch (title) {
+      //     case 'Drums':
+      //       drawBars(analyserRef, canvasRef);
+      //       break;
+      //     case 'Lead Guitar':
+      //       drawGradient(analyserRef, canvasRef);
+      //       break;
+      //     case 'Lead Vocal':
+      //       drawLine(analyserRef, canvasRef);
+      //       break;
+      //     case 'BGVs':
+      //       drawLine(analyserRef, canvasRef);
+      //       break;      
+      //     default:
+      //       drawBars(analyserRef, canvasRef);
+      //       break;
+      //   }
+      // }
     }
   }, [audioContext]);
-
-  useEffect(() => {
-    console.log(canvasRef)
-    if (canvasRef.current && analyserRef.current) {
-      let WIDTH = 640;
-      let HEIGHT = 100;
-      const canvasCtx = canvasRef.current.getContext("2d");
-      let drawVisual;
-
-      analyserRef.current.fftSize = 1024;
-      var bufferLength = analyserRef.current.fftSize;
-      console.log(bufferLength);
-      var dataArray = new Float32Array(bufferLength);
-
-      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-
-      function draw() {
-        drawVisual = requestAnimationFrame(draw);
-
-        analyserRef.current.getFloatTimeDomainData(dataArray);
-
-        canvasCtx.fillStyle = 'rgb(200, 200, 200)';
-        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
-
-        canvasCtx.lineWidth = 2;
-        canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
-
-        canvasCtx.beginPath();
-
-        var sliceWidth = WIDTH * 1.0 / bufferLength;
-        var x = 0;
-
-        for(var i = 0; i < bufferLength; i++) {
-    
-          var v = dataArray[i] * 200.0;
-          var y = HEIGHT/2 + v;
-
-          if(i === 0) {
-            canvasCtx.moveTo(x, y);
-          } else {
-            canvasCtx.lineTo(x, y);
-          }
-
-          x += sliceWidth;
-        }
-
-        canvasCtx.lineTo(canvasRef.current.width, canvasRef.current.height/2);
-        canvasCtx.stroke();
-      };
-
-      draw();
-    }
-  }, [analyserRef, audioContext])
 
   useEffect(() => {
     if (isPlaying) {
@@ -154,7 +226,7 @@ export default function AudioTrack({ audioContext, title, src, isPlaying, soloed
           <input className="w-full" type="range" onChange={handleVolumeChange} min="0" max="2" value={currentVolume} step="0.01" />
         </div>
       </div>
-      <canvas ref={canvasRef} width="75" height="75"></canvas>
+      {/* <canvas ref={canvasRef} width="75" height="75"></canvas> */}
     </div>
   );
 }
