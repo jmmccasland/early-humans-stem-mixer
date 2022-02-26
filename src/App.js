@@ -28,9 +28,11 @@ function App() {
   const [soloedTracks, setSoloedTracks] = useState([]);
 
   useEffect(() => {
-    const createdAudioContext = new AudioContext();
-    setAudioContext(createdAudioContext);
-  }, []);
+    if (tracks.length) {
+      const createdAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+      setAudioContext(createdAudioContext);
+    }
+  }, [tracks]);
 
   const playSong = () => {
     if (isPlaying) {
@@ -111,10 +113,12 @@ function App() {
           {/* <img src={art} /> */}
         </div>
         <div className="p-4">
-          <button className="h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={downloadStems}>Download Stems</button>
-          <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={playSong}>
-            {isPlaying ? "Pause" : "Play"}
+          <button className="h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={downloadStems}>
+            Download Stems
           </button>
+          {tracks.length ? <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={playSong}>
+            {isPlaying ? "Pause" : "Play"}
+          </button> : ""}
           <div className="console">
             {tracks?.map((track, index) => {
               return (
