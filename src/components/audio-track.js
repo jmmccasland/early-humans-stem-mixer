@@ -12,7 +12,7 @@ export default function AudioTrack({
   trackNumber,
   setTrackLoadedCount
 }) {
-  const [currentVolume, setCurrentVolume] = useState(1);
+  const [currentVolume, setCurrentVolume] = useState(0.5);
   const [isMuted, toggleMuted] = useState(muted);
   const [isSoloed, toggleSoloed] = useState(false);
   const soundRef = useRef(null);
@@ -21,6 +21,7 @@ export default function AudioTrack({
     if (src) {
       const sound = new Howl({
         src: [src],
+        masterGain: true,
         // html5: true, // streaming gets shit out of sync
         onload: function() {
           setTrackLoadedCount()
@@ -47,16 +48,15 @@ export default function AudioTrack({
 
   useEffect(() => {
     if(soloedTracks.length) {
-      // console.log(soloedTracks);
       if (soloedTracks.indexOf(title) !== -1) {
-        // elRef.current.muted = false
+        soundRef.current.mute(false);
         toggleSoloed(true);
       } else {
-        // elRef.current.muted = true
+        soundRef.current.mute(true);
         toggleSoloed(false);
       }
     } else {
-      // elRef.current.muted = false;
+      soundRef.current.mute(false);
       toggleSoloed(false);
     }
   }, [soloedTracks, title]);
@@ -76,8 +76,14 @@ export default function AudioTrack({
   }
 
   const handleVolumeChange = (e) => {
-    setCurrentVolume(e.target.value);
-    // gainRef.current.gain.value = e.target.value;
+    const value = e.target.value;
+    setCurrentVolume(value);
+    if (value > 1) {
+      soundRef.current.volume(1);
+      console.log(soundRef.current);
+    } else {
+      soundRef.current.volume(value);
+    }
   }
 
   return (
@@ -99,7 +105,7 @@ export default function AudioTrack({
           </button>
         </div>
         <div className="h-4 w-full flex-grow mt-2 mx-4 mb-4">
-          <input className="w-full" type="range" onChange={handleVolumeChange} min="0" max="2" value={currentVolume} step="0.01" />
+          <input className="w-full" type="range" onChange={handleVolumeChange} min="0" max="1" value={currentVolume} step="0.01" />
         </div>
       </div>
       {/* <canvas ref={canvasRef} width="75" height="75"></canvas> */}
