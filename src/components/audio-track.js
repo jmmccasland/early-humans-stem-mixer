@@ -23,6 +23,12 @@ export default function AudioTrack({
         src: src,
         masterGain: true,
         volume: currentVolume,
+        onplay: function() {
+          console.log(`playing ${title}`)
+        },
+        onplayerror: function() {
+          alert(`there was an error playing the ${title} stem`)
+        },
         // html5: true, // streaming gets shit out of sync
         onload: function() {
           setTrackLoadedCount()
