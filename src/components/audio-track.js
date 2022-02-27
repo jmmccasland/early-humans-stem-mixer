@@ -97,12 +97,13 @@ export default function AudioTrack({
 
   return (
     <div className={`audio-track ${trackNumber === numberOfTracks ? 'border-r': ''}`}>
-      <div className="track-info flex justify-between items-center w-full flex-wrap">
-        <div className="track-tape">{title}</div>
+      <div className="flex flex-grow justify-between items-center w-full flex-wrap desktop:flex-col desktop:justify-center dekstop:flex-nowrap">
+        <div className="track-tape desktop:order-3">{title}</div>
         <div className="flex items-center gap-1">
           <button
             className={`w-11 h-11 text-xs text-white border rounded border-gray-800 ${isSoloed ? 'bg-yellow-400' : 'bg-gray-400'}`}
             onClick={()=> soloTrack(title)}
+            type="button"
           >
             SOLO
           </button>
@@ -113,8 +114,15 @@ export default function AudioTrack({
             MUTE
           </button>
         </div>
-        <div className="h-4 w-full flex-grow mt-2 mx-4 mb-4">
-          <input className="w-full" type="range" onChange={handleVolumeChange} min="0" max="1" value={currentVolume} step="0.01" />
+        <div className="relative w-full flex-grow my-4 desktop:order-2">
+          <input className="w-full desktop:w-auto desktop:absolute desktop:-rotate-90 desktop:top-1/2 desktop:left-1/2 desktop:transform desktop:-translate-x-1/2 desktop:-translate-y-1/2"
+            type="range"
+            onChange={handleVolumeChange}
+            min="0"
+            max="1"
+            value={currentVolume}
+            step="0.01"
+          />
         </div>
       </div>
       {/* <canvas ref={canvasRef} width="75" height="75"></canvas> */}

@@ -5,9 +5,11 @@ import {
 import AudioTrack from "./components/audio-track";
 import art from "./bounces/art.jpeg";
 
+import loadingAudio from "./bounces/loading-bus.mp3";
+
 import drumAudio from "./bounces/drum-bus.mp3";
 import bassAudio from "./bounces/bass-bus.mp3";
-import rythmGuitarAudio from "./bounces/rythm-guitar-bus.mp3";
+import rhythmGuitarAudio from "./bounces/rhythm-guitar-bus.mp3";
 import leadGuitarAudio from "./bounces/lead-guitar-bus.mp3";
 import leadVocalAudio from "./bounces/lead-vocal-bus.mp3";
 import bgvAudio from "./bounces/bgv-bus.mp3";
@@ -15,7 +17,7 @@ import synthAudio from "./bounces/synth-bus.mp3";
 import auxAudio from "./bounces/aux-bus.mp3";
 import drumWebm from "./bounces/drum-bus.webm";
 import bassWebm from "./bounces/bass-bus.webm";
-import rythmGuitarWebm from "./bounces/rythm-guitar-bus.webm";
+import rhythmGuitarWebm from "./bounces/rhythm-guitar-bus.webm";
 import leadGuitarWebm from "./bounces/lead-guitar-bus.webm";
 import leadVocalWebm from "./bounces/lead-vocal-bus.webm";
 import bgvWebm from "./bounces/bgv-bus.webm";
@@ -23,7 +25,7 @@ import synthWebm from "./bounces/synth-bus.webm";
 import auxWebm from "./bounces/aux-bus.webm";
 import drumOgg from "./bounces/drum-bus.ogg";
 import bassOgg from "./bounces/bass-bus.ogg";
-import rythmGuitarOgg from "./bounces/rythm-guitar-bus.ogg";
+import rhythmGuitarOgg from "./bounces/rhythm-guitar-bus.ogg";
 import leadGuitarOgg from "./bounces/lead-guitar-bus.ogg";
 import leadVocalOgg from "./bounces/lead-vocal-bus.ogg";
 import bgvOgg from "./bounces/bgv-bus.ogg";
@@ -40,8 +42,8 @@ const stems = [
     src: [bassWebm, bassAudio, bassOgg]
   },
   {
-    trackName: "Rythm Guitar",
-    src: [rythmGuitarWebm, rythmGuitarAudio, rythmGuitarOgg]
+    trackName: "Rhythm Guitar",
+    src: [rhythmGuitarWebm, rhythmGuitarAudio, rhythmGuitarOgg]
   },
   {
     trackName: "Lead Guitar",
@@ -66,28 +68,31 @@ const stems = [
 ];
 
 /* @TODO: 
-  functionality:
+  console functionality:
   ✅ - can play song
   ✅ - can pause song
   ✅ - can mute each individual track
   ✅ - can solo each individual track
   ✅ - can control the volume of each track 
   ✅ - can run on mobile
+  - muting or soling a track removes the other status
   - can see current position in song
   - can slide to chosen position in song
   ✅ - tracks stay synced (perhaps wait til all stems download to begin playing?)
   ✅ - shows loading state of downloading mp3s
-  - more polished loading state
-    - (perhaps w/ info on how to use app 
-    - need to notate that user must NOT be in silent mode
-    - and manual trigger to begin downloading stems)
   ✅ - (iOS) once play button is exposed, audio should start right after action
   ✅ - volume fader's don't decrease weirdly when increasing initially (set initial state of volume on howl constructor)
+  
+  experience req:
+  ⭐️ - more polished loading state
+      - (perhaps w/ info on how to use app 
+      - need to notate that user must NOT be in silent mode
+      - and manual trigger to begin downloading stems)
 
   style/content:
   ✅ - is visually responsive on mobile
-  - and desktop
-  - shows album art
+  ✅ - and desktop
+  ✅ - shows album art
   - makes use of spotify canvas video
   - has follow links for early humans socials etc
   - add gtag
@@ -104,7 +109,31 @@ const stems = [
   - Metadata and sharing information
 */
 
+const Console = ({tracks, isPlaying, soloedTracks, trackLoadedCount, toggleTrackSolo, handleSetTrackLoadedCount}) => {
+  return tracks.length ? (
+    <div className="console flex-grow">
+      {tracks.map((track, index) => {
+        return (
+          <AudioTrack
+            key={index}
+            trackNumber={index + 1}
+            numberOfTracks={tracks.length}
+            title={track.trackName}
+            src={track.src}
+            isPlaying={isPlaying}
+            soloedTracks={soloedTracks}
+            toggleTrackSolo={toggleTrackSolo}
+            trackLoaded={trackLoadedCount}
+            setTrackLoadedCount={() => handleSetTrackLoadedCount(track.trackName)}
+          />
+        )
+      })}
+    </div>
+  ) : "";
+}
+
 function App() {
+  const [isSetup, setIsSetup] = useState(true);
   const [isPlaying, toggleIsPlaying] = useState(false);
   const [tracks, setTracks] = useState(stems);
   const [soloedTracks, setSoloedTracks] = useState([]);
@@ -138,50 +167,55 @@ function App() {
     }
   }
 
+  const SetupPrompt = () => (
+    <div className="console">
+      setup time
+    </div>
+  )
+
+  const Controls = () => (
+    <div className="flex items-center">
+      <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400"
+        onClick={playSong}
+      >
+        {isPlaying ? "Pause" : "Play"}
+      </button>
+      {/* <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400"
+        onClick={stopSong}
+      >
+        Stop
+      </button> */}
+    </div>
+  )
+
   return (
-    <div className="w-full" style={{ backgroundImage: art, }}>
-      <header>
-        {/* early humans */}
+    <div className="flex flex-col w-full h-screen" style={{ backgroundImage: art, }}>
+      <header className="flex justify-center p-8">
+        <img className="w-48" src={art} alt="" />
       </header>
-      <main>
-        
-        <div className="w-fullbg-gray-400">
-          {/* waveform visualizer */}
-          {/* <img src={art} /> */}
-        </div>
-        <div className="p-4">
-          {/* <button className="h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={downloadStems}>
-            Download Stems
-          </button> */}
-
-          {tracks.length === trackLoadedCount ? (
-            <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400"
-              onClick={playSong}
-            >
-              {isPlaying ? "Pause" : "Play"}
-            </button> 
-          ) : "Loading stems. . . this may take a minute or two"}
-
-          <div className="console">
-            {tracks.map((track, index) => {
-              return (
-                <AudioTrack
-                  key={index}
-                  trackNumber={index + 1}
-                  numberOfTracks={tracks.length}
-                  title={track.trackName}
-                  src={track.src}
-                  isPlaying={isPlaying}
-                  soloedTracks={soloedTracks}
-                  toggleTrackSolo={toggleTrackSolo}
-                  trackLoaded={trackLoadedCount}
-                  setTrackLoadedCount={() => handleSetTrackLoadedCount(track.trackName)}
-                  />
-              )
-            })}
-          </div>
-        </div>
+      <main className="flex flex-col flex-grow p-4">
+        {/* <button className="h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={downloadStems}>
+          Download Stems
+        </button> */}
+        {tracks.length === trackLoadedCount ? (
+          <Controls />
+        ) : ""}
+        {isSetup ? (
+          <Console
+            toggleTrackSolo={toggleTrackSolo}
+            tracks={tracks}
+            isPlaying={isPlaying}
+            soloedTracks={soloedTracks}
+            trackLoadedCount={trackLoadedCount}
+            handleSetTrackLoadedCount={handleSetTrackLoadedCount}
+          />
+        ) : (
+          <SetupPrompt loadingAudio={loadingAudio}/>
+        )}
       </main>
+      <footer className="p-8 text-white text-center">
+        copyright &copy; {new Date().getFullYear()} early humans 
+      </footer>
     </div>
   );
 }
