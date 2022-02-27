@@ -5,11 +5,11 @@
 @layer base {
   body {
     background: linear-gradient(-115deg, #360033, #2c87bf);
-    background-size: 200% 200%;
+    background-size: 400% 400%;
 
-    -webkit-animation: AnimationName 10s ease infinite;
-    -moz-animation: AnimationName 10s ease infinite;
-    animation: AnimationName 10s ease infinite;
+    -webkit-animation: AnimationName 12s ease infinite;
+    -moz-animation: AnimationName 12s ease infinite;
+    animation: AnimationName 12s ease infinite;
   }
 
   @-webkit-keyframes AnimationName {
@@ -24,39 +24,33 @@
   }
   @keyframes AnimationName {
     0%{background-position:0% 50%}
-    50%{background-position:25% 50%}
+    50%{background-position:100% 50%}
     100%{background-position:0% 50%}
   }
 }
 
 @layer components {
+  .controls {
+    @apply w-full mx-auto max-w-xl p-4 bg-silver desktop:max-w-4xl;
+    border-left: 4px solid #884329;
+    border-right: 4px solid #884329;
+  }
+
   .console {
-    @apply flex flex-col justify-center mx-auto max-w-xl desktop:max-w-full desktop:flex-row;
+    @apply w-full flex flex-col flex-grow justify-center mx-auto max-w-xl desktop:max-w-4xl desktop:flex-row;
     border-left: 4px solid #884329;
     border-right: 4px solid #884329;
   }
 
   .audio-track {
-    @apply relative flex p-2 desktop:flex-col desktop:flex-shrink-0 desktop:flex-grow-0 desktop:justify-between desktop:items-center;
+    @apply relative flex p-2 desktop:flex-col desktop:justify-between desktop:items-center;
     @apply border-y border-l border-gray-700 bg-silver;
     /* border-top: 7px solid #884329;
     border-bottom: 7px solid #884329; */
   }
 
-  /* .audio-track:first-child { */
-    /* border-left: 14px solid #884329;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-  }
-
-  .audio-track:last-child {
-    border-right: 14px solid #884329;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-  } */
-
   .track-tape {
-    @apply block transform -rotate-2 rounded p-3 font-bold uppercase text-center text-xs;
+    @apply block transform -rotate-2 rounded p-2 font-bold uppercase text-center text-2xs;
     background-color: #fff;
   }
 }

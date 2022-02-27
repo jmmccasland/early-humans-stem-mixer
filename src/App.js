@@ -75,8 +75,9 @@ const stems = [
   ✅ - can solo each individual track
   ✅ - can control the volume of each track 
   ✅ - can run on mobile
-  - muting or soling a track removes the other status
+  ✅ - muting or soling a track removes the other status
   - can see current position in song
+  - has stop button
   - can slide to chosen position in song
   ✅ - tracks stay synced (perhaps wait til all stems download to begin playing?)
   ✅ - shows loading state of downloading mp3s
@@ -84,10 +85,10 @@ const stems = [
   ✅ - volume fader's don't decrease weirdly when increasing initially (set initial state of volume on howl constructor)
   
   experience req:
-  ⭐️ - more polished loading state
+  ✅ - more polished loading state
       - (perhaps w/ info on how to use app 
-      - need to notate that user must NOT be in silent mode
-      - and manual trigger to begin downloading stems)
+    ✅  - need to notate that user must NOT be in silent mode
+    ✅  - and manual trigger to begin downloading stems)
 
   style/content:
   ✅ - is visually responsive on mobile
@@ -109,9 +110,22 @@ const stems = [
   - Metadata and sharing information
 */
 
-const Console = ({tracks, isPlaying, soloedTracks, trackLoadedCount, toggleTrackSolo, handleSetTrackLoadedCount}) => {
+const SetupPrompt = ({ handleSetup }) => (
+  <>
+    <div className="controls w-full justify-center mx-auto max-w-xl p-4 bg-silver desktop:max-w-4xl">
+      <p className="text-center">Confirm your device is not in silent mode to download stems</p>
+      <button className="block mx-auto mt-2 h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={handleSetup}>
+        Confirm to Rock
+      </button>
+    </div>
+    <Console disabled tracks={stems} soloedTracks={[]} handleSetTrackLoadedCount={() => {}} />
+    {/* Check if user on ios or android */}
+  </>
+)
+
+const Console = ({disabled, tracks, isPlaying, soloedTracks, trackLoadedCount, toggleTrackSolo, handleSetTrackLoadedCount}) => {
   return tracks.length ? (
-    <div className="console flex-grow">
+    <div className={`console ${disabled ? 'opacity-30 pointer-events-none cursor-not-allowed' : ''}`}>
       {tracks.map((track, index) => {
         return (
           <AudioTrack
@@ -133,7 +147,7 @@ const Console = ({tracks, isPlaying, soloedTracks, trackLoadedCount, toggleTrack
 }
 
 function App() {
-  const [isSetup, setIsSetup] = useState(true);
+  const [isSetup, setIsSetup] = useState(false);
   const [isPlaying, toggleIsPlaying] = useState(false);
   const [tracks, setTracks] = useState(stems);
   const [soloedTracks, setSoloedTracks] = useState([]);
@@ -167,16 +181,15 @@ function App() {
     }
   }
 
-  const SetupPrompt = () => (
-    <div className="console">
-      setup time
-    </div>
-  )
+  const handleSetup = () => {
+    setIsSetup(true)
+  }
 
-  const Controls = () => (
-    <div className="flex items-center">
-      <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400"
-        onClick={playSong}
+  const Controls = ({disabled}) => (
+    <div className="controls flex justify-between items-center">
+      <span className="text-xs">Status: {disabled ? "Loading. . ." : "Loaded"}</span>
+      <button disabled={disabled} className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400"
+        onClick={disabled ? () => console.log("not yet") : playSong}
       >
         {isPlaying ? "Pause" : "Play"}
       </button>
@@ -194,23 +207,20 @@ function App() {
         <img className="w-48" src={art} alt="" />
       </header>
       <main className="flex flex-col flex-grow p-4">
-        {/* <button className="h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={downloadStems}>
-          Download Stems
-        </button> */}
-        {tracks.length === trackLoadedCount ? (
-          <Controls />
-        ) : ""}
         {isSetup ? (
-          <Console
-            toggleTrackSolo={toggleTrackSolo}
-            tracks={tracks}
-            isPlaying={isPlaying}
-            soloedTracks={soloedTracks}
-            trackLoadedCount={trackLoadedCount}
-            handleSetTrackLoadedCount={handleSetTrackLoadedCount}
-          />
+          <>
+            <Controls disabled={tracks.length !== trackLoadedCount} />
+            <Console
+              toggleTrackSolo={toggleTrackSolo}
+              tracks={tracks}
+              isPlaying={isPlaying}
+              soloedTracks={soloedTracks}
+              trackLoadedCount={trackLoadedCount}
+              handleSetTrackLoadedCount={handleSetTrackLoadedCount}
+            />
+          </>
         ) : (
-          <SetupPrompt loadingAudio={loadingAudio}/>
+          <SetupPrompt loadingAudio={loadingAudio} handleSetup={handleSetup} />
         )}
       </main>
       <footer className="p-8 text-white text-center">

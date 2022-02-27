@@ -10,6 +10,9 @@ module.exports = {
         "black": "#11181b",
         "silver": "#e6eaeb",
         "brown": "#884329"
+      },
+      fontSize: {
+        "2xs": "0.6rem",
       }
     },
     screens: {
