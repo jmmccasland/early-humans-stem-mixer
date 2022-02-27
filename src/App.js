@@ -21,39 +21,47 @@ import leadVocalWebm from "./bounces/lead-vocal-bus.webm";
 import bgvWebm from "./bounces/bgv-bus.webm";
 import synthWebm from "./bounces/synth-bus.webm";
 import auxWebm from "./bounces/aux-bus.webm";
+import drumOgg from "./bounces/drum-bus.ogg";
+import bassOgg from "./bounces/bass-bus.ogg";
+import rythmGuitarOgg from "./bounces/rythm-guitar-bus.ogg";
+import leadGuitarOgg from "./bounces/lead-guitar-bus.ogg";
+import leadVocalOgg from "./bounces/lead-vocal-bus.ogg";
+import bgvOgg from "./bounces/bgv-bus.ogg";
+import synthOgg from "./bounces/synth-bus.ogg";
+import auxOgg from "./bounces/aux-bus.ogg";
 
 const stems = [
   {
     trackName: "Drums",
-    src: [drumWebm]
+    src: [drumWebm, drumOgg, drumAudio]
   },
   {
     trackName: "Bass",
-    src: [bassWebm]
+    src: [bassWebm, bassOgg, bassAudio]
   },
   {
     trackName: "Rythm Guitar",
-    src: [rythmGuitarWebm]
+    src: [rythmGuitarWebm, rythmGuitarOgg, rythmGuitarAudio]
   },
   {
     trackName: "Lead Guitar",
-    src: [leadGuitarWebm]
+    src: [leadGuitarWebm, leadGuitarOgg, leadGuitarAudio]
   },
   {
     trackName: "Lead Vocal",
-    src: [leadVocalWebm]
+    src: [leadVocalWebm, leadVocalOgg, leadVocalAudio]
   },
   {
     trackName: "BGVs",
-    src: [bgvWebm]
+    src: [bgvWebm, bgvOgg, bgvAudio]
   },
   {
     trackName: "Synth",
-    src: [synthWebm]
+    src: [synthWebm, synthOgg, synthAudio]
   },
   {
     trackName: "Aux",
-    src: [auxWebm]
+    src: [auxWebm, auxOgg, auxAudio]
   },
 ];
 
@@ -71,8 +79,9 @@ const stems = [
   ✅ - shows loading state of downloading mp3s
   - more polished loading state
     - (perhaps w/ info on how to use app 
+    - need to notate that user must NOT be in silent mode
     - and manual trigger to begin downloading stems)
-  - (iOS) once play button is exposed, audio should start right after action
+  ✅ - (iOS) once play button is exposed, audio should start right after action
   ✅ - volume fader's don't decrease weirdly when increasing initially (set initial state of volume on howl constructor)
 
   style/content:
@@ -84,14 +93,14 @@ const stems = [
   - add gtag
 
   stretch:
-  - can visualize the loudness of each track
+  - can visualize the loudness of each track in bubble next to title
   - can visualize the loudness of each track when modified
   - can paint it onto canvas in different ways for each track
   - can save the canvas painting and download image
 
   pre-launch:
   - cross browser test (chrome (+ios), safari (+ios), firefox)
-  - Page title
+  ✅ - Page title
   - Metadata and sharing information
 */
 
