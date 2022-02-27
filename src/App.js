@@ -33,35 +33,35 @@ import auxOgg from "./bounces/aux-bus.ogg";
 const stems = [
   {
     trackName: "Drums",
-    src: [drumWebm, drumOgg, drumAudio]
+    src: [drumWebm, drumAudio, drumOgg]
   },
   {
     trackName: "Bass",
-    src: [bassWebm, bassOgg, bassAudio]
+    src: [bassWebm, bassAudio, bassOgg]
   },
   {
     trackName: "Rythm Guitar",
-    src: [rythmGuitarWebm, rythmGuitarOgg, rythmGuitarAudio]
+    src: [rythmGuitarWebm, rythmGuitarAudio, rythmGuitarOgg]
   },
   {
     trackName: "Lead Guitar",
-    src: [leadGuitarWebm, leadGuitarOgg, leadGuitarAudio]
+    src: [leadGuitarWebm, leadGuitarAudio, leadGuitarOgg]
   },
   {
     trackName: "Lead Vocal",
-    src: [leadVocalWebm, leadVocalOgg, leadVocalAudio]
+    src: [leadVocalWebm, leadVocalAudio, leadVocalOgg]
   },
   {
     trackName: "BGVs",
-    src: [bgvWebm, bgvOgg, bgvAudio]
+    src: [bgvWebm, bgvAudio, bgvOgg]
   },
   {
     trackName: "Synth",
-    src: [synthWebm, synthOgg, synthAudio]
+    src: [synthWebm, synthAudio, synthOgg]
   },
   {
     trackName: "Aux",
-    src: [auxWebm, auxOgg, auxAudio]
+    src: [auxWebm, auxAudio, auxOgg]
   },
 ];
 

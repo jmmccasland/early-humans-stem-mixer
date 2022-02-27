@@ -23,6 +23,7 @@ export default function AudioTrack({
         src: src,
         // masterGain: true,
         volume: currentVolume,
+        format: ["webm", "ogg", "mp3"],
         onplay: function() {
           console.log(`playing ${title}`)
         },
