@@ -31,20 +31,20 @@
 
 @layer components {
   .controls {
-    @apply w-full mx-auto max-w-xl p-4 bg-silver desktop:max-w-4xl;
+    @apply w-full mx-auto max-w-xl p-4 bg-silver border-b border-gray-700 desktop:max-w-4xl;
     border-left: 4px solid #884329;
     border-right: 4px solid #884329;
   }
 
   .console {
-    @apply w-full flex flex-col flex-grow justify-center mx-auto max-w-xl desktop:max-w-4xl desktop:flex-row;
+    @apply w-full flex flex-col flex-grow justify-center mx-auto max-w-xl bg-silver desktop:max-w-4xl desktop:flex-row;
     border-left: 4px solid #884329;
     border-right: 4px solid #884329;
   }
 
   .audio-track {
     @apply relative flex p-2 desktop:flex-col desktop:justify-between desktop:items-center;
-    @apply border-y border-l border-gray-700 bg-silver;
+    @apply border-b border-l border-gray-700 bg-silver;
     /* border-top: 7px solid #884329;
     border-bottom: 7px solid #884329; */
   }

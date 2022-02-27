@@ -1,10 +1,12 @@
 import {
-  useState,
-  useRef
+  useEffect,
+  useRef,
+  useState
 } from "react";
 import AudioTrack from "./components/audio-track";
 import art from "./bounces/art.jpeg";
 
+import { Howl } from "howler";
 import loadingAudio from "./bounces/loading-bus.mp3";
 
 import drumAudio from "./bounces/drum-bus.mp3";
@@ -108,20 +110,25 @@ const stems = [
   - cross browser test (chrome (+ios), safari (+ios), firefox)
   ✅ - Page title
   - Metadata and sharing information
+  - add extra formats for loading audio
 */
 
-const SetupPrompt = ({ handleSetup }) => (
-  <>
-    <div className="controls w-full justify-center mx-auto max-w-xl p-4 bg-silver desktop:max-w-4xl">
-      <p className="text-center">Confirm your device is not in silent mode to download stems</p>
-      <button className="block mx-auto mt-2 h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400" onClick={handleSetup}>
-        Confirm to Rock
-      </button>
-    </div>
-    <Console disabled tracks={stems} soloedTracks={[]} handleSetTrackLoadedCount={() => {}} />
-    {/* Check if user on ios or android */}
-  </>
-)
+const SetupPrompt = ({ handleSetup }) => {
+  return (
+    <>
+      <div className="controls w-full justify-center mx-auto max-w-xl p-4 bg-silver desktop:max-w-4xl">
+        <p className="text-center">Confirm your device is not in silent mode to download stems</p>
+        <button className="block mx-auto mt-2 h-11 px-2 text-xs text-white border rounded border-gray-800 bg-gray-400"
+          onClick={() => handleSetup()}
+        >
+          Confirm to Rock
+        </button>
+      </div>
+      <Console disabled tracks={stems} soloedTracks={[]} handleSetTrackLoadedCount={() => {}} />
+      {/* Check if user on ios or android */}
+    </>
+  )
+}
 
 const Console = ({disabled, tracks, isPlaying, soloedTracks, trackLoadedCount, toggleTrackSolo, handleSetTrackLoadedCount}) => {
   return tracks.length ? (
@@ -146,19 +153,76 @@ const Console = ({disabled, tracks, isPlaying, soloedTracks, trackLoadedCount, t
   ) : "";
 }
 
+const Controls = ({disabled, isPlaying, playSong, playerStatus}) => (
+  <div className="controls flex justify-between items-center">
+    <span className="text-xs">Status: {playerStatus}</span>
+    <button disabled={disabled} className="w-11 h-11 text-2xs uppercase text-white border rounded border-gray-800 bg-gray-400"
+      onClick={disabled ? () => console.log("not yet") : playSong}
+    >
+      {isPlaying ? "Pause" : "Play"}
+    </button>
+    {/* <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400"
+      onClick={stopSong}
+    >
+      Stop
+    </button> */}
+  </div>
+)
+
 function App() {
+  const [playerStatus, setPlayerStatus] = useState("Loading. . .");
   const [isSetup, setIsSetup] = useState(false);
   const [isPlaying, toggleIsPlaying] = useState(false);
   const [tracks, setTracks] = useState(stems);
   const [soloedTracks, setSoloedTracks] = useState([]);
   const [trackLoadedCount, setTrackLoadedCount] = useState(0);
   const currentCount = useRef(0);
+  const soundRef = useRef(null);
+
+  useEffect(() => {
+    const sound = new Howl({
+      src: loadingAudio,
+      // masterGain: true,
+      volume: 0,
+      loop: true,
+      format: ["mp3"],
+      onplay: function() {
+        console.log(`playing loading`)
+      },
+      onplayerror: function() {
+        alert(`there was an error playing the loading stem`)
+      },
+      // html5: true, // streaming gets shit out of sync
+      onload: function() {
+        // setTrackLoadedCount()
+      },
+      onend: function() {},
+      onpause: function() {},
+      onstop: function() {},
+      onseek: function() {},
+      onloaderror: function(id, err) {
+        // handleLoadError()
+        console.log("error in track", "loading track")
+        console.log(err)
+        setPlayerStatus("Error loading test sample");
+      }
+    });
+    soundRef.current = sound;
+  }, [])
 
   const playSong = () => {
     if (isPlaying) {
       toggleIsPlaying(false)
+      setPlayerStatus("Paused")
     } else {
       toggleIsPlaying(true)
+      if (soundRef.current) {
+        soundRef.current.fade(1, 0.25, 2000);
+        window.setTimeout(() => {
+          soundRef.current.stop()
+        }, 2000);
+      }
+      setPlayerStatus("Playing. . .")
     }
   }
 
@@ -178,38 +242,27 @@ function App() {
 
     if (currentCount.current === tracks.length) {
       setTrackLoadedCount(8);
+      soundRef.current.fade(1, 0.25, 4000);
+      setPlayerStatus("Stems downloaded - start mixing!")
     }
   }
 
   const handleSetup = () => {
+    soundRef.current.play();
+    soundRef.current.fade(0, 1, 4000);
     setIsSetup(true)
+    setPlayerStatus("Fetching stems. . .")
   }
 
-  const Controls = ({disabled}) => (
-    <div className="controls flex justify-between items-center">
-      <span className="text-xs">Status: {disabled ? "Loading. . ." : "Loaded"}</span>
-      <button disabled={disabled} className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400"
-        onClick={disabled ? () => console.log("not yet") : playSong}
-      >
-        {isPlaying ? "Pause" : "Play"}
-      </button>
-      {/* <button className="w-11 h-11 text-xs text-white border rounded border-gray-800 bg-gray-400"
-        onClick={stopSong}
-      >
-        Stop
-      </button> */}
-    </div>
-  )
-
   return (
-    <div className="flex flex-col w-full h-screen" style={{ backgroundImage: art, }}>
+    <div className="flex flex-col w-full min-h-screen" style={{ backgroundImage: art, }}>
       <header className="flex justify-center p-8">
         <img className="w-48" src={art} alt="" />
       </header>
       <main className="flex flex-col flex-grow p-4">
         {isSetup ? (
           <>
-            <Controls disabled={tracks.length !== trackLoadedCount} />
+            <Controls disabled={tracks.length !== trackLoadedCount} isPlaying={isPlaying} playSong={playSong} playerStatus={playerStatus} />
             <Console
               toggleTrackSolo={toggleTrackSolo}
               tracks={tracks}

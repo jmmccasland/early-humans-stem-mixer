@@ -100,25 +100,25 @@ export default function AudioTrack({
 
   return (
     <div className={`audio-track ${trackNumber === numberOfTracks ? 'border-r': ''}`}>
-      <div className="flex flex-grow justify-between items-center w-full flex-wrap desktop:flex-col desktop:justify-center dekstop:flex-nowrap">
-        <div className="track-tape desktop:order-3">{title}</div>
-        <div className="flex items-center gap-1">
+      <div className="flex flex-grow justify-between items-center w-full flex-wrap desktop:flex-col desktop:justify-center desktop:flex-nowrap">
+        <div className="track-tape desktop:order-3 desktop:mt-2">{title}</div>
+        <div className="flex items-center gap-1 desktop:mb-2">
           <button
-            className={`w-11 h-11 text-xs text-white border rounded border-gray-800 ${isSoloed ? 'bg-yellow-400' : 'bg-gray-400'}`}
+            className={`py-2 px-1 text-2xs text-white border rounded border-gray-800 ${isSoloed ? 'bg-yellow-400' : 'bg-gray-400'}`}
             onClick={()=> soloTrack(title)}
             type="button"
           >
             SOLO
           </button>
           <button
-            className={`w-11 h-11 text-xs text-white border rounded border-gray-800 ${isMuted ? 'bg-orange-400' : 'bg-gray-400'}`}
+            className={`py-2 px-1 text-2xs text-white border rounded border-gray-800 ${isMuted ? 'bg-orange-400' : 'bg-gray-400'}`}
             onClick={() => muteTrack()}
           >
             MUTE
           </button>
         </div>
         <div className="relative w-full flex-grow my-4 desktop:order-2">
-          <input className="w-full desktop:w-auto desktop:absolute desktop:-rotate-90 desktop:top-1/2 desktop:left-1/2 desktop:transform desktop:-translate-x-1/2 desktop:-translate-y-1/2"
+          <input className="w-full h-full desktop:absolute desktop:-rotate-90 desktop:top-1/2 desktop:left-1/2 desktop:transform desktop:-translate-x-1/2 desktop:-translate-y-1/2"
             type="range"
             onChange={handleVolumeChange}
             min="0"
