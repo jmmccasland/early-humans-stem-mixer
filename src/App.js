@@ -25,35 +25,35 @@ import auxWebm from "./bounces/aux-bus.webm";
 const stems = [
   {
     trackName: "Drums",
-    src: [drumWebm, drumAudio]
+    src: [drumWebm]
   },
   {
     trackName: "Bass",
-    src: [bassWebm, bassAudio]
+    src: [bassWebm]
   },
   {
     trackName: "Rythm Guitar",
-    src: [rythmGuitarWebm, rythmGuitarAudio]
+    src: [rythmGuitarWebm]
   },
   {
     trackName: "Lead Guitar",
-    src: [leadGuitarWebm, leadGuitarAudio]
+    src: [leadGuitarWebm]
   },
   {
     trackName: "Lead Vocal",
-    src: [leadVocalWebm, leadVocalAudio]
+    src: [leadVocalWebm]
   },
   {
     trackName: "BGVs",
-    src: [bgvWebm, bgvAudio]
+    src: [bgvWebm]
   },
   {
     trackName: "Synth",
-    src: [synthWebm, synthAudio]
+    src: [synthWebm]
   },
   {
     trackName: "Aux",
-    src: [auxWebm, auxAudio]
+    src: [auxWebm]
   },
 ];
 

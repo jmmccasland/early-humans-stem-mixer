@@ -21,7 +21,7 @@ export default function AudioTrack({
     if (src) {
       const sound = new Howl({
         src: src,
-        masterGain: true,
+        // masterGain: true,
         volume: currentVolume,
         onplay: function() {
           console.log(`playing ${title}`)
