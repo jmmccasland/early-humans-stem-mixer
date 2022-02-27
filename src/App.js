@@ -88,6 +88,11 @@ const stems = [
   - can visualize the loudness of each track when modified
   - can paint it onto canvas in different ways for each track
   - can save the canvas painting and download image
+
+  pre-launch:
+  - cross browser test (chrome (+ios), safari (+ios), firefox)
+  - Page title
+  - Metadata and sharing information
 */
 
 function App() {
