@@ -23,7 +23,7 @@ export default function AudioTrack({
         src: src,
         // masterGain: true,
         volume: currentVolume,
-        format: ["webm", "ogg", "mp3"],
+        format: ["webm", "mp3", "ogg"],
         onplay: function() {
           console.log(`playing ${title}`)
         },
@@ -38,9 +38,10 @@ export default function AudioTrack({
         onpause: function() {},
         onstop: function() {},
         onseek: function() {},
-        onloaderror: function() {
+        onloaderror: function(id, err) {
           // handleLoadError()
           console.log("error in track", title)
+          console.log(err)
         }
       });
       soundRef.current = sound;
@@ -60,6 +61,7 @@ export default function AudioTrack({
       if (soloedTracks.indexOf(title) !== -1) {
         soundRef.current.mute(false);
         toggleSoloed(true);
+        toggleMuted(false);
       } else {
         soundRef.current.mute(true);
         toggleSoloed(false);
@@ -76,6 +78,7 @@ export default function AudioTrack({
       soundRef.current.mute(false);
     } else {
       toggleMuted(true);
+      toggleSoloed(false);
       soundRef.current.mute(true);
     }
   }
