@@ -21,7 +21,6 @@ export default function AudioTrack({
     if (src) {
       const sound = new Howl({
         src: src,
-        // masterGain: true,
         volume: currentVolume,
         format: ["webm", "mp3", "ogg"],
         onplay: function() {
@@ -33,11 +32,16 @@ export default function AudioTrack({
         // html5: true, // streaming gets shit out of sync
         onload: function() {
           setTrackLoadedCount()
+          // console.log(this.duration())
         },
         onend: function() {},
         onpause: function() {},
         onstop: function() {},
-        onseek: function() {},
+        onseek: function() {
+          console.log("onseek", title)
+          // Start updating the progress of the track.
+          // requestAnimationFrame(self.step.bind(self));
+        },
         onloaderror: function(id, err) {
           // handleLoadError()
           console.log("error in track", title)
@@ -101,7 +105,7 @@ export default function AudioTrack({
   return (
     <div className={`audio-track ${trackNumber === numberOfTracks ? 'border-r': ''}`}>
       <div className="flex flex-grow justify-between items-center w-full flex-wrap desktop:flex-col desktop:justify-center desktop:flex-nowrap">
-        <div className="track-tape desktop:order-3 desktop:mt-2">{title}</div>
+        <div className="track-tape desktop:mt-2 desktop:order-3">{title}</div>
         <div className="flex items-center gap-1 desktop:mb-2">
           <button
             className={`py-2 px-1 text-2xs text-white border rounded border-gray-800 ${isSoloed ? 'bg-yellow-400' : 'bg-gray-400'}`}
@@ -118,7 +122,7 @@ export default function AudioTrack({
           </button>
         </div>
         <div className="relative w-full flex-grow my-4 desktop:order-2">
-          <input className="w-full h-full desktop:absolute desktop:-rotate-90 desktop:top-1/2 desktop:left-1/2 desktop:transform desktop:-translate-x-1/2 desktop:-translate-y-1/2"
+          <input className="w-full desktop:absolute desktop:-rotate-90 desktop:top-1/2 desktop:left-1/2 desktop:transform desktop:-translate-x-1/2 desktop:-translate-y-1/2"
             type="range"
             onChange={handleVolumeChange}
             min="0"
@@ -128,7 +132,6 @@ export default function AudioTrack({
           />
         </div>
       </div>
-      {/* <canvas ref={canvasRef} width="75" height="75"></canvas> */}
     </div>
   );
 }
