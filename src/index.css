@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 @layer base {
+  @font-face {
+    font-family: 'Stilson';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/stilson.woff2') format('woff2'), /* Super Modern Browsers */
+         url('./fonts/stilson.woff') format('woff'), /* Modern Browsers */
+         url('./fonts/stilson.ttf') format('truetype');/* Safari, Android, iOS */
+  }
+
   body {
     background: linear-gradient(-115deg, #360033, #2c87bf);
     background-size: 400% 400%;
@@ -37,7 +46,7 @@
   }
 
   .console {
-    @apply w-full flex flex-col flex-grow justify-center mx-auto max-w-xl bg-silver desktop:max-w-4xl desktop:flex-row;
+    @apply w-full flex flex-col flex-grow justify-center mx-auto max-w-xl bg-silver desktop:max-w-4xl desktop:flex-row desktop:max-h-80;
     border-left: 4px solid #884329;
     border-right: 4px solid #884329;
   }
