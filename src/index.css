@@ -62,6 +62,10 @@
     @apply block transform -rotate-2 rounded p-2 font-bold uppercase text-center text-2xs;
     background-color: #fff;
   }
+
+  .font-stilson {
+    font-family: "Stilson";
+  }
 }
 
 
