@@ -257,7 +257,9 @@ function App() {
   return (
     <div className="flex flex-col w-full min-h-screen" style={{ backgroundImage: art, }}>
       <header className="flex justify-center p-8">
-        <img className="w-48" src={art} alt="" />
+        <a target="_blank" rel="noreferrer" href="https://onerpm.link/132791051547">
+          <img className="w-48" src={art} alt="Lenny by Early Humans" />
+        </a>
       </header>
       <main className="flex flex-col flex-grow p-4">
         {isSetup ? (
