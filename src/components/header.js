@@ -7,8 +7,7 @@ export default function Header() {
       <a target="_blank" rel="noreferrer" href="https://onerpm.link/132791051547">
         <img className="w-48" src={art} alt="Lenny by Early Humans" />
       </a>
-      <h1 className="mt-4 font-stilson text-white text-3xl font-bold">lenny by early humans</h1>
-      <p className="font-stilson text-white text-xl font-bold">mixed and mastered by jesse cannon</p>
+      {/* <h1 className="mt-4 font-stilson text-white text-3xl font-bold">lenny by early humans</h1> */}
     </header>
   )
 }
