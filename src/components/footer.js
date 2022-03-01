@@ -5,8 +5,8 @@ import IconIg from "../icons/ig-icon";
 
 export default function Footer() {
   return (
-    <footer className="px-4 pb-4 font-stilson text-white text-center">
-      <p className="font-stilson text-white text-base pb-4 font-bold">mixed and mastered by jesse cannon</p>
+    <footer className="p-4 font-stilson text-white text-center">
+      <p className="font-stilson text-white text-xl font-bold">mixed and mastered by jesse cannon</p>
       <ul className="flex items-center text-white gap-1 py-4 justify-center">
         <li className="mx-3"><a className="w-10 h-10" target="_blank" rel="noreferrer" href="https://www.twitter.com/early__humans" alt="Follow Early Humans on Twitter"><IconTwitter /></a></li>
         <li className="mx-3"><a className="w-6" target="_blank" rel="noreferrer" href="https://www.instagram.com/early__humans/" alt="Follow Early Humans on Instagram"><IconIg /></a></li>
