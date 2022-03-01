@@ -4,7 +4,8 @@ import {
   useState
 } from "react";
 import AudioTrack from "./components/audio-track";
-import art from "./bounces/art.jpeg";
+import Header from "./components/header";
+import Footer from "./components/footer";
 
 import { Howl } from "howler";
 import loadingAudio from "./bounces/loading-bus.mp3";
@@ -255,14 +256,8 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col w-full min-h-screen" style={{ backgroundImage: art, }}>
-      <header className="flex flex-col items-center justify-center p-8">
-        <a target="_blank" rel="noreferrer" href="https://onerpm.link/132791051547">
-          <img className="w-48" src={art} alt="Lenny by Early Humans" />
-        </a>
-        <h1 className="mt-4 font-stilson text-white text-3xl font-bold">lenny by early humans</h1>
-        <p className="font-stilson text-white text-xl font-bold">mixed and mastered by jesse cannon</p>
-      </header>
+    <div className="flex flex-col w-full min-h-screen">
+      <Header />
       <main className="flex flex-col flex-grow p-4">
         {isSetup ? (
           <>
@@ -280,9 +275,7 @@ function App() {
           <SetupPrompt loadingAudio={loadingAudio} handleSetup={handleSetup} />
         )}
       </main>
-      <footer className="p-4 font-stilson text-white text-center">
-        copyright &copy; {new Date().getFullYear()} early humans 
-      </footer>
+      <Footer />
     </div>
   );
 }
