@@ -121,8 +121,8 @@ export default function AudioTrack({
             MUTE
           </button>
         </div>
-        <div className="relative w-full flex-grow my-4 desktop:order-2">
-          <input className="w-full desktop:absolute desktop:-rotate-90 desktop:top-1/2 desktop:left-1/2 desktop:transform desktop:-translate-x-1/2 desktop:-translate-y-1/2"
+        <div className="relative w-full flex-grow my-4 desktop:order-2 desktop:min-h-[7rem]">
+          <input className="w-full desktop:absolute desktop:-rotate-90 desktop:top-1/2 desktop:left-1/2 desktop:transform desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:min-w-[7rem]"
             type="range"
             onChange={handleVolumeChange}
             min="0"

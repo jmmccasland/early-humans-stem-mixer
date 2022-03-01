@@ -13,6 +13,9 @@ module.exports = {
       },
       fontSize: {
         "2xs": "0.6rem",
+      },
+      minWidth: {
+        "min-w-7": "7rem"
       }
     },
     screens: {
