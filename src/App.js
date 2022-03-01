@@ -221,7 +221,7 @@ function App() {
         soundRef.current.fade(1, 0.25, 2000);
         window.setTimeout(() => {
           soundRef.current.stop()
-        }, 2000);
+        }, 500);
       }
       setPlayerStatus("Playing. . .")
     }
